@@ -608,6 +608,22 @@ function drawGhost(ctx, ghost) {
 }
 
 function drawUI(ctx, game) {
+  if (game.state === 'gameOver') {
+    ctx.fillStyle = 'rgba(0,0,0,0.65)'
+    ctx.fillRect(0, 0, WIDTH, HEIGHT)
+
+    ctx.fillStyle = '#f44'
+    ctx.font = 'bold 100px monospace'
+    ctx.textAlign = 'center'
+    ctx.fillText('GAME OVER', WIDTH / 2, HEIGHT / 2 - 14)
+
+    const adv = isMobile() ? 'Tap' : 'Press SPACE'
+    ctx.fillStyle = '#fff'
+    ctx.font = '20px monospace'
+    ctx.fillText(adv + ' to restart', WIDTH / 2, HEIGHT / 2 + 42)
+    return
+  }
+
   if (game.state === 'ready') {
     ctx.fillStyle = COLORS.text
     ctx.font = 'bold 20px monospace'
@@ -751,8 +767,7 @@ function updateUI(game, mobile) {
 
   const status = document.getElementById('status')
   if (game.state === 'gameOver') {
-    status.textContent = 'GAME OVER — ' + adv
-    status.style.color = '#f44'
+    status.textContent = ''
   } else if (game.state === 'levelComplete') {
     status.textContent = 'LEVEL COMPLETE! — ' + adv
     status.style.color = '#ff0'
