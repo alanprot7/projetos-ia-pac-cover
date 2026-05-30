@@ -360,6 +360,7 @@ function checkGhostCollision(game) {
         const idx = Math.min(game.ghostCombo, 3)
         game.score += SCORE.GHOST[idx]
         game.ghostCombo++
+        playEatGhost()
       } else {
         stopFrightSound()
         playDeath()

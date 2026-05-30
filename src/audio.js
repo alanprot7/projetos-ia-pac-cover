@@ -26,16 +26,19 @@ function playPowerUp() {
   const c = getCtx()
   const osc = c.createOscillator()
   const gain = c.createGain()
-  osc.type = 'sine'
-  osc.frequency.setValueAtTime(300, c.currentTime)
-  osc.frequency.exponentialRampToValueAtTime(800, c.currentTime + 0.3)
-  osc.frequency.exponentialRampToValueAtTime(400, c.currentTime + 0.5)
-  gain.gain.setValueAtTime(0.2, c.currentTime)
-  gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.5)
+  osc.type = 'square'
+
+  osc.frequency.setValueAtTime(600, c.currentTime)
+  osc.frequency.exponentialRampToValueAtTime(1200, c.currentTime + 0.15)
+  osc.frequency.exponentialRampToValueAtTime(200, c.currentTime + 0.25)
+
+  gain.gain.setValueAtTime(0.18, c.currentTime)
+  gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.25)
+
   osc.connect(gain)
   gain.connect(c.destination)
   osc.start()
-  osc.stop(c.currentTime + 0.5)
+  osc.stop(c.currentTime + 0.25)
 }
 
 let frightOsc = null
@@ -47,10 +50,15 @@ function startFrightSound() {
   frightOsc = c.createOscillator()
   frightGain = c.createGain()
   frightOsc.type = 'sawtooth'
-  frightOsc.frequency.setValueAtTime(150, c.currentTime)
-  frightOsc.frequency.linearRampToValueAtTime(300, c.currentTime + 0.5)
-  frightOsc.frequency.linearRampToValueAtTime(150, c.currentTime + 1)
-  frightGain.gain.setValueAtTime(0.08, c.currentTime)
+
+  const now = c.currentTime
+  for (let i = 0; i < 30; i++) {
+    const t = now + i * 0.22
+    const freq = i % 2 === 0 ? 140 : 170
+    frightOsc.frequency.setValueAtTime(freq, t)
+  }
+
+  frightGain.gain.setValueAtTime(0.07, c.currentTime)
   frightOsc.connect(frightGain)
   frightGain.connect(c.destination)
   frightOsc.start()
@@ -58,11 +66,32 @@ function startFrightSound() {
 
 function stopFrightSound() {
   if (!frightOsc) return
-  const c = getCtx()
-  frightGain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.1)
-  frightOsc.stop(c.currentTime + 0.1)
+  try { frightOsc.stop() } catch (_) { /* already stopped */ }
   frightOsc = null
   frightGain = null
+}
+
+function playEatGhost() {
+  const c = getCtx()
+  const osc = c.createOscillator()
+  const gain = c.createGain()
+  osc.type = 'sine'
+
+  osc.frequency.setValueAtTime(300, c.currentTime)
+  osc.frequency.exponentialRampToValueAtTime(380, c.currentTime + 0.1)
+  osc.frequency.setValueAtTime(480, c.currentTime + 0.12)
+  osc.frequency.exponentialRampToValueAtTime(560, c.currentTime + 0.22)
+  osc.frequency.setValueAtTime(680, c.currentTime + 0.24)
+  osc.frequency.exponentialRampToValueAtTime(960, c.currentTime + 0.4)
+
+  gain.gain.setValueAtTime(0.2, c.currentTime)
+  gain.gain.setValueAtTime(0.2, c.currentTime + 0.37)
+  gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.5)
+
+  osc.connect(gain)
+  gain.connect(c.destination)
+  osc.start()
+  osc.stop(c.currentTime + 0.5)
 }
 
 function playDeath() {
