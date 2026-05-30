@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pac-Man</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; overflow: hidden; background: #111; }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        font-family: monospace;
+      }
+      .ui-bar {
+        display: flex;
+        justify-content: space-between;
+        width: 560px;
+        padding: 4px 0;
+        color: #fff;
+        font-size: 14px;
+      }
+      .status {
+        color: #fff;
+        font-size: 14px;
+        padding: 4px 0;
+        min-height: 22px;
+      }
+      canvas {
+        border: 2px solid #333;
+        image-rendering: pixelated;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ui-bar">
+      <span>SCORE: <span id="score">0</span></span>
+      <span>LEVEL: <span id="level">1</span></span>
+    </div>
+    <canvas id="game-canvas" width="560" height="620"></canvas>
+    <div class="ui-bar">
+      <span>LIVES: <span id="lives">2</span></span>
+      <span class="status" id="status"></span>
+    </div>
+    <script src="src/constants.js"></script>
+    <script src="src/map.js"></script>
+    <script src="src/audio.js"></script>
+    <script src="src/game.js"></script>
+  </body>
+</html>
