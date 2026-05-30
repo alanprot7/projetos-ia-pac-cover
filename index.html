@@ -2,11 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Pac-Man</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { width: 100%; height: 100%; overflow: hidden; background: #111; }
+      html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #111;
+        overscroll-behavior: none;
+      }
       body {
         display: flex;
         flex-direction: column;
@@ -14,6 +20,20 @@
         justify-content: center;
         min-height: 100vh;
         font-family: monospace;
+        touch-action: manipulation;
+      }
+      .game-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+      }
+      .game-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-shrink: 0;
       }
       .ui-bar {
         display: flex;
@@ -32,18 +52,111 @@
       canvas {
         border: 2px solid #333;
         image-rendering: pixelated;
+        display: block;
+      }
+      .joystick-area {
+        display: none;
+        flex: 1;
+        width: 100%;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        align-items: center;
+        justify-content: center;
+        min-height: 0;
+      }
+      .joystick {
+        display: grid;
+        grid-template-columns: 80px 80px 80px;
+        grid-template-rows: 80px 80px 80px;
+        gap: 4px;
+      }
+      .joy-btn {
+        width: 80px;
+        height: 80px;
+        background: rgba(255,255,255,0.08);
+        border: 2px solid rgba(255,255,255,0.25);
+        border-radius: 14px;
+        color: rgba(255,255,255,0.7);
+        font-size: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: background 0.08s, border-color 0.08s;
+      }
+      .joy-btn:active, .joy-btn.active {
+        background: rgba(255,255,255,0.25);
+        border-color: rgba(255,255,255,0.55);
+        color: #fff;
+      }
+      .joy-empty {
+        background: transparent;
+        border: none;
+        cursor: default;
+      }
+      .joy-up    { grid-column: 2; grid-row: 1; }
+      .joy-left  { grid-column: 1; grid-row: 2; }
+      .joy-center { grid-column: 2; grid-row: 2; }
+      .joy-right { grid-column: 3; grid-row: 2; }
+      .joy-down  { grid-column: 2; grid-row: 3; }
+
+      @media (max-width: 800px) and (pointer: coarse) {
+        .game-container {
+          height: 100vh;
+        }
+        .game-area {
+          height: 65vh;
+          justify-content: center;
+        }
+        .joystick-area {
+          display: flex;
+          height: 35vh;
+          flex: none;
+        }
+        .ui-bar {
+          width: auto;
+          max-width: 560px;
+          padding: 2px 10px;
+          font-size: 11px;
+        }
+        canvas {
+          max-height: calc(65vh - 56px);
+          max-width: calc(100vw - 8px);
+        }
+        .status {
+          font-size: 11px;
+        }
+        canvas {
+          max-height: calc(65vh - 56px);
+          max-width: calc(100vw - 8px);
+        }
       }
     </style>
   </head>
   <body>
-    <div class="ui-bar">
-      <span>SCORE: <span id="score">0</span></span>
-      <span>LEVEL: <span id="level">1</span></span>
-    </div>
-    <canvas id="game-canvas" width="560" height="620"></canvas>
-    <div class="ui-bar">
-      <span>LIVES: <span id="lives">2</span></span>
-      <span class="status" id="status"></span>
+    <div class="game-container">
+      <div class="game-area">
+        <div class="ui-bar">
+          <span>SCORE: <span id="score">0</span></span>
+          <span>LEVEL: <span id="level">1</span></span>
+        </div>
+        <canvas id="game-canvas" width="560" height="620"></canvas>
+        <div class="ui-bar">
+          <span>LIVES: <span id="lives">2</span></span>
+          <span class="status" id="status"></span>
+        </div>
+      </div>
+      <div class="joystick-area" id="joystick-area">
+        <div class="joystick">
+          <button class="joy-btn joy-up"    data-dir="up">▲</button>
+          <button class="joy-btn joy-left"  data-dir="left">◀</button>
+          <div   class="joy-btn joy-empty joy-center"></div>
+          <button class="joy-btn joy-right" data-dir="right">▶</button>
+          <button class="joy-btn joy-down"  data-dir="down">▼</button>
+        </div>
+      </div>
     </div>
     <script src="src/constants.js"></script>
     <script src="src/map.js"></script>

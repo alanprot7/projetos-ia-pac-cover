@@ -742,21 +742,95 @@ function draw(ctx, game) {
   drawUI(ctx, game)
 }
 
-function updateUI(game) {
+function updateUI(game, mobile) {
   document.getElementById('score').textContent = game.score
   document.getElementById('lives').textContent = Math.max(0, game.lives - 1)
   document.getElementById('level').textContent = game.level
 
+  const adv = mobile ? 'Tap' : 'Press SPACE'
+
   const status = document.getElementById('status')
   if (game.state === 'gameOver') {
-    status.textContent = 'GAME OVER — Press SPACE'
+    status.textContent = 'GAME OVER — ' + adv
     status.style.color = '#f44'
   } else if (game.state === 'levelComplete') {
-    status.textContent = 'LEVEL COMPLETE! — Press SPACE'
+    status.textContent = 'LEVEL COMPLETE! — ' + adv
     status.style.color = '#ff0'
   } else {
     status.textContent = ''
   }
+}
+
+function dirNameToConst(name) {
+  switch (name) {
+    case 'up':    return DIR.UP
+    case 'down':  return DIR.DOWN
+    case 'left':  return DIR.LEFT
+    case 'right': return DIR.RIGHT
+    default:      return DIR.NONE
+  }
+}
+
+function setupJoystick(game) {
+  const area = document.getElementById('joystick-area')
+  if (!area) return
+
+  const buttons = area.querySelectorAll('[data-dir]')
+  let audioUnlocked = false
+
+  function unlockAudio() {
+    if (audioUnlocked) return
+    audioUnlocked = true
+    const c = window.AudioContext || window.webkitAudioContext
+    try {
+      const a = new c()
+      if (a.state === 'suspended') a.resume()
+      a.close()
+    } catch (_) { /* ok */ }
+  }
+
+  function handleTouchStart(dirName) {
+    unlockAudio()
+    if (game.state === 'gameOver') {
+      stopFrightSound()
+      const fresh = initGame(1)
+      Object.assign(game, fresh)
+      game.pacman.nextDir = dirNameToConst(dirName)
+      return
+    }
+    if (game.state === 'levelComplete') {
+      stopFrightSound()
+      const fresh = initGame(game.level + 1)
+      Object.assign(game, fresh)
+      game.pacman.nextDir = dirNameToConst(dirName)
+      return
+    }
+    if (game.state !== 'playing') return
+    game.pacman.nextDir = dirNameToConst(dirName)
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('pointerdown', (e) => {
+      e.preventDefault()
+      handleTouchStart(btn.dataset.dir)
+    })
+
+    btn.addEventListener('pointerenter', (e) => {
+      if (e.buttons > 0) {
+        handleTouchStart(btn.dataset.dir)
+      }
+    })
+  })
+
+  area.addEventListener('pointerdown', (e) => {
+    if (!e.target.closest('[data-dir]')) {
+      unlockAudio()
+    }
+  })
+}
+
+function isMobile() {
+  return matchMedia('(max-width: 800px) and (pointer: coarse)').matches
 }
 
 function init() {
@@ -766,13 +840,27 @@ function init() {
   let game = initGame(1)
   let lastTime = 0
 
+  setupJoystick(game)
+
+  canvas.addEventListener('pointerdown', () => {
+    if (game.state === 'gameOver') {
+      stopFrightSound()
+      const fresh = initGame(1)
+      Object.assign(game, fresh)
+    } else if (game.state === 'levelComplete') {
+      stopFrightSound()
+      const fresh = initGame(game.level + 1)
+      Object.assign(game, fresh)
+    }
+  })
+
   function loop(time) {
     const dt = Math.min((time - lastTime) / 1000, 0.05)
     lastTime = time
 
     update(game, dt)
     draw(ctx, game)
-    updateUI(game)
+    updateUI(game, isMobile())
 
     requestAnimationFrame(loop)
   }
