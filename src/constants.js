@@ -40,7 +40,7 @@ const SCORE = {
 
 const COLORS = {
   bg: '#000',
-  wall: '#2121de',
+  wall: '#5577ff',
   pellet: '#ffb8ae',
   power: '#ffb8ae',
   gate: '#ffb8ff',
