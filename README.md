@@ -1,16 +1,40 @@
-# React + Vite
+# Pacman - Teste DeepSeek + OpenCode
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<table align="center" border="0" style="border: none;">
+  <tr style="border: none;">
+    <td align="center" valign="middle" style="border: none;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/DeepSeek_logo.svg" alt="DeepSeek Logo" width="200" />
+    </td>
+    <td align="center" valign="middle" style="border: none;">
+      <span style="font-size: 50px;">+</span>
+    </td>
+    <td align="center" valign="middle" style="border: none;">
+      <img src="./src/opencode-wordmark-dark.svg" alt="OpenCode Logo" width="200" />
+    </td>
+  </tr>
+</table>
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Este projeto é um ambiente de testes para a criação de aplicações simples, focado em validar a integração e o uso do **OpenCode** em conjunto com a **API do DeepSeek**.
 
-## React Compiler
+## Objetivo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+O propósito principal deste repositório é explorar as capacidades de geração de código e assistência no desenvolvimento de projetos experimentais (como este clone de Pacman), utilizando modelos de linguagem avançados.
 
-## Expanding the ESLint configuration
+## Mudanças Recentes
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Originalmente iniciado com um template React, o projeto foi simplificado e todas as bibliotecas do React foram removidas para tornar a base de código mais leve e direta para os testes de IA.
+
+## Tecnologias
+
+<table>
+  <tr>
+    <td><b>OpenCode</b></td>
+    <td>Ferramenta de auxílio ao desenvolvimento.</td>
+  </tr>
+  <tr>
+    <td><b>DeepSeek API</b></td>
+    <td>Inteligência artificial utilizada para geração e revisão de lógica.</td>
+  </tr>
+</table>
