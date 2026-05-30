@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- corpo do fantasma -->
+  <path d="M4 16
+    A12 12 0 0 1 28 16
+    L28 21
+    Q24 25 20 21
+    Q16 25 12 21
+    Q8 25 4 21
+    Z"
+    fill="#ff0000"/>
+  <!-- olhos -->
+  <ellipse cx="10.5" cy="14" rx="2.5" ry="3" fill="#fff"/>
+  <ellipse cx="21.5" cy="14" rx="2.5" ry="3" fill="#fff"/>
+  <!-- pupilas -->
+  <circle cx="11.5" cy="13.5" r="1.5" fill="#2121de"/>
+  <circle cx="22.5" cy="13.5" r="1.5" fill="#2121de"/>
+</svg>
