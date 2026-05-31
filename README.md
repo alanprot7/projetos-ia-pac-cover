@@ -1,4 +1,4 @@
-# Pacman - Teste DeepSeek + OpenCode
+# Teste DeepSeek + OpenCode
 
 <table align="center" border="0" style="border: none;">
   <tr style="border: none;">
