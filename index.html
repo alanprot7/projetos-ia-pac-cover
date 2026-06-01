@@ -66,42 +66,21 @@
         justify-content: center;
         min-height: 0;
       }
-      .joystick {
-        display: grid;
-        grid-template-columns: 80px 80px 80px;
-        grid-template-rows: 80px 80px 80px;
-        gap: 4px;
-      }
-      .joy-btn {
-        width: 80px;
-        height: 80px;
-        background: rgba(255,255,255,0.08);
-        border: 2px solid rgba(255,255,255,0.25);
-        border-radius: 14px;
-        color: rgba(255,255,255,0.7);
-        font-size: 28px;
+      .gesture-area {
+        width: 70%;
+        height: calc(100% - 60px);
+        margin-bottom: 60px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-        transition: background 0.08s, border-color 0.08s;
+        color: #666;
+        font-size: 16px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
       }
-      .joy-btn:active, .joy-btn.active {
-        background: rgba(255,255,255,0.25);
-        border-color: rgba(255,255,255,0.55);
-        color: #fff;
-      }
-      .joy-empty {
-        background: transparent;
-        border: none;
-        cursor: default;
-      }
-      .joy-up    { grid-column: 2; grid-row: 1; }
-      .joy-left  { grid-column: 1; grid-row: 2; }
-      .joy-center { grid-column: 2; grid-row: 3; }
-      .joy-right { grid-column: 3; grid-row: 2; }
-      .joy-down  { grid-column: 2; grid-row: 2; }
 
       @media (max-width: 800px) and (pointer: coarse) {
         .game-container {
@@ -150,13 +129,7 @@
         </div>
       </div>
       <div class="joystick-area" id="joystick-area">
-        <div class="joystick">
-          <button class="joy-btn joy-up"    data-dir="up">▲</button>
-          <button class="joy-btn joy-left"  data-dir="left">◀</button>
-          <div   class="joy-btn joy-empty joy-center"></div>
-          <button class="joy-btn joy-right" data-dir="right">▶</button>
-          <button class="joy-btn joy-down"  data-dir="down">▼</button>
-        </div>
+        <div class="gesture-area" id="gesture-area">área de gestos</div>
       </div>
     </div>
     <script src="src/constants.js"></script>
