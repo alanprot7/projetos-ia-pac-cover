@@ -787,11 +787,13 @@ function dirNameToConst(name) {
   }
 }
 
-function setupJoystick(game) {
-  const area = document.getElementById('joystick-area')
+function setupGesture(game) {
+  const area = document.getElementById('gesture-area')
   if (!area) return
 
-  const buttons = area.querySelectorAll('[data-dir]')
+  const SWIPE_MIN = 30
+  let startX = 0
+  let startY = 0
   let audioUnlocked = false
 
   function unlockAudio() {
@@ -805,43 +807,49 @@ function setupJoystick(game) {
     } catch (_) { /* ok */ }
   }
 
-  function handleTouchStart(dirName) {
+  function handleGesture(dirName) {
     unlockAudio()
     if (game.state === 'gameOver') {
       stopFrightSound()
       const fresh = initGame(1)
       Object.assign(game, fresh)
-      game.pacman.nextDir = dirNameToConst(dirName)
       return
     }
     if (game.state === 'levelComplete') {
       stopFrightSound()
       const fresh = initGame(game.level + 1)
       Object.assign(game, fresh)
-      game.pacman.nextDir = dirNameToConst(dirName)
       return
     }
     if (game.state !== 'playing') return
     game.pacman.nextDir = dirNameToConst(dirName)
   }
 
-  buttons.forEach((btn) => {
-    btn.addEventListener('pointerdown', (e) => {
-      e.preventDefault()
-      handleTouchStart(btn.dataset.dir)
-    })
-
-    btn.addEventListener('pointerenter', (e) => {
-      if (e.buttons > 0) {
-        handleTouchStart(btn.dataset.dir)
-      }
-    })
+  area.addEventListener('pointerdown', (e) => {
+    e.preventDefault()
+    startX = e.clientX
+    startY = e.clientY
+    unlockAudio()
   })
 
-  area.addEventListener('pointerdown', (e) => {
-    if (!e.target.closest('[data-dir]')) {
-      unlockAudio()
+  area.addEventListener('pointerup', (e) => {
+    const dx = e.clientX - startX
+    const dy = e.clientY - startY
+    const absDx = Math.abs(dx)
+    const absDy = Math.abs(dy)
+
+    if (absDx < SWIPE_MIN && absDy < SWIPE_MIN) return
+
+    if (absDx > absDy) {
+      handleGesture(dx > 0 ? 'right' : 'left')
+    } else {
+      handleGesture(dy > 0 ? 'down' : 'up')
     }
+  })
+
+  area.addEventListener('pointerleave', () => {
+    startX = 0
+    startY = 0
   })
 }
 
@@ -856,7 +864,7 @@ function init() {
   let game = initGame(1)
   let lastTime = 0
 
-  setupJoystick(game)
+  setupGesture(game)
 
   canvas.addEventListener('pointerdown', () => {
     if (game.state === 'gameOver') {
