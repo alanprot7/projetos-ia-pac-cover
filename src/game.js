@@ -853,6 +853,57 @@ function setupGesture(game) {
   })
 }
 
+function setupJoystick(game) {
+  const grid = document.getElementById('joy-grid')
+  if (!grid) return
+
+  let audioUnlocked = false
+
+  function unlockAudio() {
+    if (audioUnlocked) return
+    audioUnlocked = true
+    const c = window.AudioContext || window.webkitAudioContext
+    try {
+      const a = new c()
+      if (a.state === 'suspended') a.resume()
+      a.close()
+    } catch (_) { /* ok */ }
+  }
+
+  function handleBtn(dirName) {
+    unlockAudio()
+    if (game.state === 'gameOver') {
+      stopFrightSound()
+      const fresh = initGame(1)
+      Object.assign(game, fresh)
+      game.pacman.nextDir = dirNameToConst(dirName)
+      return
+    }
+    if (game.state === 'levelComplete') {
+      stopFrightSound()
+      const fresh = initGame(game.level + 1)
+      Object.assign(game, fresh)
+      game.pacman.nextDir = dirNameToConst(dirName)
+      return
+    }
+    if (game.state !== 'playing') return
+    game.pacman.nextDir = dirNameToConst(dirName)
+  }
+
+  grid.querySelectorAll('[data-dir]').forEach((btn) => {
+    btn.addEventListener('pointerdown', (e) => {
+      e.preventDefault()
+      handleBtn(btn.dataset.dir)
+    })
+
+    btn.addEventListener('pointerenter', (e) => {
+      if (e.buttons > 0) {
+        handleBtn(btn.dataset.dir)
+      }
+    })
+  })
+}
+
 function isMobile() {
   return matchMedia('(max-width: 800px) and (pointer: coarse)').matches
 }
@@ -865,6 +916,23 @@ function init() {
   let lastTime = 0
 
   setupGesture(game)
+  setupJoystick(game)
+
+  const toggle = document.getElementById('control-toggle')
+  const gestureArea = document.getElementById('gesture-area')
+  const joyGrid = document.getElementById('joy-grid')
+
+  if (toggle && gestureArea && joyGrid) {
+    toggle.addEventListener('change', () => {
+      if (toggle.checked) {
+        gestureArea.classList.remove('hidden')
+        joyGrid.classList.add('hidden')
+      } else {
+        gestureArea.classList.add('hidden')
+        joyGrid.classList.remove('hidden')
+      }
+    })
+  }
 
   canvas.addEventListener('pointerdown', () => {
     if (game.state === 'gameOver') {
