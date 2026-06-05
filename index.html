@@ -77,12 +77,15 @@
         border: 1px solid rgba(255,255,255,0.12);
         border-radius: 10px;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         color: #666;
         font-size: 16px;
         letter-spacing: 1px;
         text-transform: uppercase;
+        text-align: center;
+        gap: 6px;
       }
       .gesture-area.hidden,
       .joy-grid.hidden {
@@ -237,12 +240,12 @@
           <button class="joy-btn joy-down"  data-dir="down">▼</button>
           <button class="joy-btn joy-right" data-dir="right">▶</button>
         </div>
-        <div class="gesture-area hidden" id="gesture-area">área de gestos</div>
+        <div class="gesture-area hidden" id="gesture-area"><span>área de gestos</span><span>ARRASTE E SOLTE</span></div>
       </div>
     </div>
-    <script src="src/constants.js?v=3"></script>
-    <script src="src/map.js?v=3"></script>
-    <script src="src/audio.js?v=3"></script>
-    <script src="src/game.js?v=3"></script>
+    <script src="src/constants.js?v=4"></script>
+    <script src="src/map.js?v=4"></script>
+    <script src="src/audio.js?v=4"></script>
+    <script src="src/game.js?v=4"></script>
   </body>
 </html>
